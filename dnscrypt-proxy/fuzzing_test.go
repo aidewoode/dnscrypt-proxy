@@ -1,7 +1,7 @@
 //go:build gofuzzbeta
 // +build gofuzzbeta
 
-package main
+package dnscrypt
 
 import (
 	"encoding/hex"

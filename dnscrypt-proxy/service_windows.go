@@ -1,4 +1,4 @@
-package main
+package dnscrypt
 
 import "golang.org/x/sys/windows/svc/mgr"
 

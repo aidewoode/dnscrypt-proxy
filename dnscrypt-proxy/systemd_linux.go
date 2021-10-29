@@ -1,7 +1,7 @@
 //go:build !android
 // +build !android
 
-package main
+package dnscrypt
 
 import (
 	"net"

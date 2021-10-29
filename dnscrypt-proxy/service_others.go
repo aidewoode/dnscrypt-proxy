@@ -1,7 +1,7 @@
 //go:build !linux && !windows
 // +build !linux,!windows
 
-package main
+package dnscrypt
 
 func ServiceManagerStartNotify() error {
 	return nil

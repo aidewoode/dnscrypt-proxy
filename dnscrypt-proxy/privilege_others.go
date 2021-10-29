@@ -1,7 +1,7 @@
 //go:build !windows && !linux
 // +build !windows,!linux
 
-package main
+package dnscrypt
 
 import (
 	"os"

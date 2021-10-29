@@ -1,4 +1,4 @@
-package main
+package dnscrypt
 
 import (
 	crypto_rand "crypto/rand"

@@ -1,4 +1,4 @@
-package main
+package dnscrypt
 
 import (
 	"github.com/miekg/dns"
