@@ -133,7 +133,7 @@ func (xTransport *XTransport) rebuildTransport() {
 		ExpectContinueTimeout:  timeout,
 		MaxResponseHeaderBytes: 4096,
 		DialContext: func(ctx context.Context, network, addrStr string) (net.Conn, error) {
-			host, port := ExtractHostAndPort(addrStr, stamps.DefaultPort)
+			host, port := extractHostAndPort(addrStr, stamps.DefaultPort)
 			ipOnly := host
 			// resolveAndUpdateCache() is always called in `Fetch()` before the `Dial()`
 			// method is used, so that a cached entry must be present at this point.
@@ -375,7 +375,7 @@ func (xTransport *XTransport) Fetch(method string, url *url.URL, accept string, 
 		url2.RawQuery = qs.Encode()
 		url = &url2
 	}
-	host, _ := ExtractHostAndPort(url.Host, 0)
+	host, _ := extractHostAndPort(url.Host, 0)
 	if xTransport.proxyDialer == nil && strings.HasSuffix(host, ".onion") {
 		return nil, 0, nil, 0, errors.New("Onion service is not reachable without Tor")
 	}

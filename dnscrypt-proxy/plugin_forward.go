@@ -38,7 +38,7 @@ func (plugin *PluginForward) Init(proxy *Proxy) error {
 		if len(line) == 0 {
 			continue
 		}
-		domain, serversStr, ok := StringTwoFields(line)
+		domain, serversStr, ok := stringTwoFields(line)
 		if !ok {
 			return fmt.Errorf(
 				"Syntax error for a forwarding rule at line %d. Expected syntax: example.com 9.9.9.9,8.8.8.8",

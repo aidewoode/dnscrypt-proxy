@@ -149,7 +149,7 @@ func ColdStart(proxy *Proxy) (*CaptivePortalHandler, error) {
 		if len(line) == 0 {
 			continue
 		}
-		name, ipsStr, ok := StringTwoFields(line)
+		name, ipsStr, ok := stringTwoFields(line)
 		if !ok {
 			return nil, fmt.Errorf(
 				"Syntax error for a captive portal rule at line %d",

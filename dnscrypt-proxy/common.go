@@ -118,7 +118,7 @@ func StringReverse(s string) string {
 	return string(r)
 }
 
-func StringTwoFields(str string) (string, string, bool) {
+func stringTwoFields(str string) (string, string, bool) {
 	if len(str) < 3 {
 		return "", "", false
 	}
@@ -159,7 +159,7 @@ func TrimAndStripInlineComments(str string) string {
 	return strings.TrimSpace(str)
 }
 
-func ExtractHostAndPort(str string, defaultPort int) (host string, port int) {
+func extractHostAndPort(str string, defaultPort int) (host string, port int) {
 	host, port = str, defaultPort
 	if idx := strings.LastIndex(str, ":"); idx >= 0 && idx < len(str)-1 {
 		if portX, err := strconv.Atoi(str[idx+1:]); err == nil {

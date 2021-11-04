@@ -61,7 +61,7 @@ func FetchCurrentDNSCryptCert(proxy *Proxy, serverName *string, proto string, pk
 		} else {
 			txt = strings.Join(t.Txt, "")
 		}
-		binCert := PackTXTRR(txt)
+		binCert := packTXTRR(txt)
 		if len(binCert) < 124 {
 			dlog.Warnf("[%v] Certificate too short", *serverName)
 			continue

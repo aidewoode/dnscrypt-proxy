@@ -35,7 +35,7 @@ func computeCacheKey(pluginsState *PluginsState, msg *dns.Msg) [32]byte {
 	}
 	h.Write(tmp[:])
 	normalizedRawQName := []byte(question.Name)
-	NormalizeRawQName(&normalizedRawQName)
+	normalizeRawQName(&normalizedRawQName)
 	h.Write(normalizedRawQName)
 	var sum [32]byte
 	h.Sum(sum[:0])

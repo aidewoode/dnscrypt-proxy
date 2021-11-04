@@ -430,7 +430,7 @@ func ConfigLoad(proxy *Proxy, flags *ConfigFlags) error {
 	if len(config.ListenAddresses) == 0 && len(config.LocalDoH.ListenAddresses) == 0 {
 		dlog.Debug("No local IP/port configured")
 	}
-	lbStrategy := LBStrategy(DefaultLBStrategy)
+	lbStrategy := lBStrategy(DefaultLBStrategy)
 	switch lbStrategyStr := strings.ToLower(config.LBStrategy); lbStrategyStr {
 	case "":
 		// default
@@ -752,12 +752,12 @@ func (config *Config) printRegisteredServers(proxy *Proxy, jsonOutput bool) erro
 	for _, registeredServer := range proxy.registeredServers {
 		addrStr, port := registeredServer.stamp.ServerAddrStr, stamps.DefaultPort
 		var hostAddr string
-		hostAddr, port = ExtractHostAndPort(addrStr, port)
+		hostAddr, port = extractHostAndPort(addrStr, port)
 		addrs := make([]string, 0)
 		if registeredServer.stamp.Proto == stamps.StampProtoTypeDoH && len(registeredServer.stamp.ProviderName) > 0 {
 			providerName := registeredServer.stamp.ProviderName
 			var host string
-			host, port = ExtractHostAndPort(providerName, port)
+			host, port = extractHostAndPort(providerName, port)
 			addrs = append(addrs, host)
 		}
 		if len(addrStr) > 0 {
@@ -898,7 +898,7 @@ func cdLocal() {
 }
 
 func isIPAndPort(addrStr string) error {
-	host, port := ExtractHostAndPort(addrStr, -1)
+	host, port := extractHostAndPort(addrStr, -1)
 	if ip := ParseIP(host); ip == nil {
 		return fmt.Errorf("Host does not parse as IP '%s'", addrStr)
 	} else if port == -1 {

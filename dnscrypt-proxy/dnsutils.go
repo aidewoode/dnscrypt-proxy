@@ -28,7 +28,7 @@ func EmptyResponseFromMessage(srcMsg *dns.Msg) *dns.Msg {
 	return &dstMsg
 }
 
-func TruncatedResponse(packet []byte) ([]byte, error) {
+func truncatedResponse(packet []byte) ([]byte, error) {
 	srcMsg := dns.Msg{}
 	if err := srcMsg.Unpack(packet); err != nil {
 		return nil, err
@@ -81,23 +81,23 @@ func RefusedResponseFromMessage(srcMsg *dns.Msg, refusedCode bool, ipv4 net.IP, 
 	return dstMsg
 }
 
-func HasTCFlag(packet []byte) bool {
+func hasTCFlag(packet []byte) bool {
 	return packet[2]&2 == 2
 }
 
-func TransactionID(packet []byte) uint16 {
+func transactionID(packet []byte) uint16 {
 	return binary.BigEndian.Uint16(packet[0:2])
 }
 
-func SetTransactionID(packet []byte, tid uint16) {
+func setTransactionID(packet []byte, tid uint16) {
 	binary.BigEndian.PutUint16(packet[0:2], tid)
 }
 
-func Rcode(packet []byte) uint8 {
+func rcode(packet []byte) uint8 {
 	return packet[3] & 0xf
 }
 
-func NormalizeRawQName(name *[]byte) {
+func normalizeRawQName(name *[]byte) {
 	for i, c := range *name {
 		if c >= 65 && c <= 90 {
 			(*name)[i] = c + 32
@@ -267,7 +267,7 @@ func dddToByte(s []byte) byte {
 	return byte((s[0]-'0')*100 + (s[1]-'0')*10 + (s[2] - '0'))
 }
 
-func PackTXTRR(s string) []byte {
+func packTXTRR(s string) []byte {
 	bs := make([]byte, len(s))
 	msg := make([]byte, 0)
 	copy(bs, s)

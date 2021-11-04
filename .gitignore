@@ -7,6 +7,7 @@
 *.swp
 *.test
 *~
+*.xcframework
 dnscrypt-proxy/dnscrypt-proxy2
 dnscrypt-proxy/dnscrypt-proxy
 .idea

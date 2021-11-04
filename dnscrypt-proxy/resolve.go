@@ -57,7 +57,7 @@ func Resolve(server string, name string, singleResolver bool) {
 		singleResolver = true
 	}
 
-	host, port := ExtractHostAndPort(server, 53)
+	host, port := extractHostAndPort(server, 53)
 	if host == "0.0.0.0" {
 		host = "127.0.0.1"
 	} else if host == "[::]" {

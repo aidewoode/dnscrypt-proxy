@@ -65,7 +65,7 @@ type ServerInfo struct {
 	odohTargetConfigs  []ODoHTargetConfig
 }
 
-type LBStrategy interface {
+type lBStrategy interface {
 	getCandidate(serversCount int) int
 }
 
@@ -121,7 +121,7 @@ type ServersInfo struct {
 	inner             []*ServerInfo
 	registeredServers []RegisteredServer
 	registeredRelays  []RegisteredServer
-	lbStrategy        LBStrategy
+	lbStrategy        lBStrategy
 	lbEstimator       bool
 }
 
@@ -317,7 +317,7 @@ func findFarthestRoute(proxy *Proxy, name string, relayStamps []stamps.ServerSta
 	}
 
 	// Anonymized DNSCrypt relays
-	serverAddrStr, _ := ExtractHostAndPort(server.stamp.ServerAddrStr, 443)
+	serverAddrStr, _ := extractHostAndPort(server.stamp.ServerAddrStr, 443)
 	serverAddr := net.ParseIP(serverAddrStr)
 	if serverAddr == nil {
 		return nil
@@ -331,7 +331,7 @@ func findFarthestRoute(proxy *Proxy, name string, relayStamps []stamps.ServerSta
 		if relayStamp.Proto != stamps.StampProtoTypeDNSCryptRelay {
 			continue
 		}
-		relayAddrStr, _ := ExtractHostAndPort(relayStamp.ServerAddrStr, 443)
+		relayAddrStr, _ := extractHostAndPort(relayStamp.ServerAddrStr, 443)
 		relayAddr := net.ParseIP(relayAddrStr)
 		if relayAddr == nil {
 			continue
@@ -480,9 +480,9 @@ func route(proxy *Proxy, name string, serverProto stamps.StampProtoType) (*Relay
 			return nil, fmt.Errorf("Relay [%v] not found", relayName)
 		}
 		if len(relayCandidateStamp.ServerAddrStr) > 0 {
-			ipOnly, _ := ExtractHostAndPort(relayCandidateStamp.ServerAddrStr, -1)
+			ipOnly, _ := extractHostAndPort(relayCandidateStamp.ServerAddrStr, -1)
 			if ip := ParseIP(ipOnly); ip != nil {
-				host, _ := ExtractHostAndPort(relayCandidateStamp.ProviderName, -1)
+				host, _ := extractHostAndPort(relayCandidateStamp.ProviderName, -1)
 				proxy.xTransport.saveCachedIP(host, ip, -1*time.Second)
 			}
 		}
@@ -606,9 +606,9 @@ func fetchDoHServerInfo(proxy *Proxy, name string, stamp stamps.ServerStamp, isN
 	// by the same entity, it could provide a unique IPv6 for each client
 	// in order to fingerprint clients across multiple IP addresses.
 	if len(stamp.ServerAddrStr) > 0 {
-		ipOnly, _ := ExtractHostAndPort(stamp.ServerAddrStr, -1)
+		ipOnly, _ := extractHostAndPort(stamp.ServerAddrStr, -1)
 		if ip := ParseIP(ipOnly); ip != nil {
-			host, _ := ExtractHostAndPort(stamp.ProviderName, -1)
+			host, _ := extractHostAndPort(stamp.ProviderName, -1)
 			proxy.xTransport.saveCachedIP(host, ip, -1*time.Second)
 		}
 	}

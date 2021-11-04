@@ -664,11 +664,11 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 				return response
 			}
 		} else if serverInfo.Proto == stamps.StampProtoTypeDoH {
-			tid := TransactionID(query)
-			SetTransactionID(query, 0)
+			tid := transactionID(query)
+			setTransactionID(query, 0)
 			serverInfo.noticeBegin(proxy)
 			serverResponse, _, tls, _, err := proxy.xTransport.DoHQuery(serverInfo.useGet, serverInfo.URL, query, proxy.timeout)
-			SetTransactionID(query, tid)
+			setTransactionID(query, tid)
 
 			if err != nil || tls == nil || !tls.HandshakeComplete {
 				if stale, ok := pluginsState.sessionData["stale"]; ok {
@@ -686,10 +686,10 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 				response = serverResponse
 			}
 			if len(response) >= MinDNSPacketSize {
-				SetTransactionID(response, tid)
+				setTransactionID(response, tid)
 			}
 		} else if serverInfo.Proto == stamps.StampProtoTypeODoHTarget {
-			tid := TransactionID(query)
+			tid := transactionID(query)
 			if len(serverInfo.odohTargetConfigs) == 0 {
 				return response
 			}
@@ -733,7 +733,7 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 			}
 
 			if len(response) >= MinDNSPacketSize {
-				SetTransactionID(response, tid)
+				setTransactionID(response, tid)
 			} else if response == nil {
 				pluginsState.returnCode = PluginsReturnCodeNetworkError
 				pluginsState.ApplyLoggingPlugins(&proxy.pluginsGlobals)
@@ -769,7 +769,7 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 				return response
 			}
 		}
-		if rcode := Rcode(response); rcode == dns.RcodeServerFailure { // SERVFAIL
+		if rcode := rcode(response); rcode == dns.RcodeServerFailure { // SERVFAIL
 			if pluginsState.dnssec {
 				dlog.Debug("A response had an invalid DNSSEC signature")
 			} else {
@@ -794,7 +794,7 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 	}
 	if clientProto == "udp" {
 		if len(response) > pluginsState.maxUnencryptedUDPSafePayloadSize {
-			response, err = TruncatedResponse(response)
+			response, err = truncatedResponse(response)
 			if err != nil {
 				pluginsState.returnCode = PluginsReturnCodeParseError
 				pluginsState.ApplyLoggingPlugins(&proxy.pluginsGlobals)
@@ -802,7 +802,7 @@ func (proxy *Proxy) processIncomingQuery(clientProto string, serverProto string,
 			}
 		}
 		clientPc.(net.PacketConn).WriteTo(response, *clientAddr)
-		if HasTCFlag(response) {
+		if hasTCFlag(response) {
 			proxy.questionSizeEstimator.blindAdjust()
 		} else {
 			proxy.questionSizeEstimator.adjust(ResponseOverhead + len(response))

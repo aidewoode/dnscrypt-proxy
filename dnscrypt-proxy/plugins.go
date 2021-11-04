@@ -312,12 +312,12 @@ func (pluginsState *PluginsState) ApplyQueryPlugins(pluginsGlobals *PluginsGloba
 func (pluginsState *PluginsState) ApplyResponsePlugins(pluginsGlobals *PluginsGlobals, packet []byte, ttl *uint32) ([]byte, error) {
 	msg := dns.Msg{Compress: true}
 	if err := msg.Unpack(packet); err != nil {
-		if len(packet) >= MinDNSPacketSize && HasTCFlag(packet) {
+		if len(packet) >= MinDNSPacketSize && hasTCFlag(packet) {
 			err = nil
 		}
 		return packet, err
 	}
-	switch Rcode(packet) {
+	switch rcode(packet) {
 	case dns.RcodeSuccess:
 		pluginsState.returnCode = PluginsReturnCodePass
 	case dns.RcodeNameError:

@@ -312,7 +312,7 @@ func prepSourceTestDownload(t *testing.T, d *SourceTestData, e *SourceTestExpect
 			e.err = "unexpected EOF"
 		case TestStateOpenErr, TestStateOpenSigErr:
 			if u, err := url.Parse(serverURL + path); err == nil {
-				host, port := ExtractHostAndPort(u.Host, -1)
+				host, port := extractHostAndPort(u.Host, -1)
 				u.Host = fmt.Sprintf("%s:%d", host, port|0x10000) // high numeric port is parsed but then fails to connect
 				serverURL = u.String()
 			}
