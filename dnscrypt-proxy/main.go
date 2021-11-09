@@ -34,16 +34,20 @@ func Run(configFile string) {
 	crypto_rand.Read(seed)
 	rand.Seed(int64(binary.LittleEndian.Uint64(seed[:])))
 
+	falseValue := false
+	resolveConfig := ""
+	timeoutOverrideConfig := 60
+
 	flags := ConfigFlags{}
-	flags.Resolve = &""
-	flags.List = &false
-	flags.ListAll = &false
-	flags.JSONOutput = &false
-	flags.Check = &false
+	flags.Resolve = &resolveConfig
+	flags.List = &falseValue
+	flags.ListAll = &falseValue
+	flags.JSONOutput = &falseValue
+	flags.Check = &falseValue
 	flags.ConfigFile = &configFile
-	flags.Child = &false
-	flags.NetprobeTimeoutOverride = &60
-	flags.ShowCerts = &false
+	flags.Child = &falseValue
+	flags.NetprobeTimeoutOverride = &timeoutOverrideConfig
+	flags.ShowCerts = &falseValue
 
 	app := &App{
 		flags: &flags,
