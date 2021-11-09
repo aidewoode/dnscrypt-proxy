@@ -26,6 +26,33 @@ type App struct {
 	flags *ConfigFlags
 }
 
+func Run(configFile string) {
+	dlog.Init("dnscrypt-proxy", dlog.SeverityNotice, "DAEMON")
+	runtime.MemProfileRate = 0
+
+	seed := make([]byte, 8)
+	crypto_rand.Read(seed)
+	rand.Seed(int64(binary.LittleEndian.Uint64(seed[:])))
+
+	flags := ConfigFlags{}
+	flags.Resolve = &""
+	flags.List = &false
+	flags.ListAll = &false
+	flags.JSONOutput = &false
+	flags.Check = &false
+	flags.ConfigFile = &configFile
+	flags.Child = &false
+	flags.NetprobeTimeoutOverride = &60
+	flags.ShowCerts = &false
+
+	app := &App{
+		flags: &flags,
+	}
+
+	app.proxy = NewProxy()
+	app.Start(nil)
+}
+
 func main() {
 	TimezoneSetup()
 	dlog.Init("dnscrypt-proxy", dlog.SeverityNotice, "DAEMON")
